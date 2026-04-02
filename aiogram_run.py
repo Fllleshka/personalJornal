@@ -4,6 +4,8 @@ import asyncio
 from createbot import bot, dp
 # Обработка стартовых команд бота
 from bot.startcommands import start_router
+# Импорт класса для работы с базой данных
+from database.baseclass import baseclass
 
 async def main():
     # Подключаем роутер, который отвечает за обработку первоначальных сообщений
