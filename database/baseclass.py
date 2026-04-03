@@ -8,6 +8,16 @@ import os
 # Базовый класс наследуемый из класса библиотеки
 class Base(DeclarativeBase):
 
+    # Функция проверки наличия файла базы данных
+    def checkdatabase(self):
+        pathtodatabase = self.databaseurl()
+        if(os.path.exists(pathtodatabase) == True):
+            #print(f"База данных существует. Расположение: {pathtodatabase}")
+            return True
+        else:
+            #print(f"База данных не существует. Расположение: {pathtodatabase}")
+            return False
+
     # Функция вычисления правильного абсолютного пути до базы
     def databaseurl(self):
         # Получаем директорию скрипта
