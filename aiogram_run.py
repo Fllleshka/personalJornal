@@ -9,7 +9,7 @@ from database.baseclass import baseclass
 # Импорт базового класса Base
 from database.baseclass import Base
 # Импорт функции создания всех таблиц в БД
-from database.tablesclass import create_all_databases
+from database.tablesclass import dbblass
 # Установка стартовых команд бота
 from bot.startmenu import set_default_commands
 
@@ -25,9 +25,7 @@ async def main():
         print("База данных уже есть")
     else:
         # Заполняем базу данных таблицами
-        create_all_databases()
-
-
+        dbblass.create_all_databases()
 
     # Начинаем постоянный опрос бота
     await dp.start_polling(bot)

@@ -32,15 +32,29 @@ def create_town(message: Messages, session) -> None:
 def create_user(user: Users, session) -> None:
     session.add(user)
 
-# Главная функция генерации таблиц и данных в БД
-def create_all_databases():
-    # Создаём сессию
-    Session = sessionmaker(engine)
-    Base.metadata.create_all(engine)
-    with Session() as session:
-        # Создаём таблицу сообщения в базе
-        create_town(Messages(), session)
-        # Создаём таблицу сообщения в базе
-        create_user(Users(), session)
+class databaseclass:
 
-    print("База данных сгенерирована")
+    # Главная функция генерации таблиц и данных в БД
+    def create_all_databases(self):
+        # Создаём сессию
+        Session = sessionmaker(engine)
+        Base.metadata.create_all(engine)
+        with Session() as session:
+            # Создаём таблицу сообщения в базе
+            create_town(Messages(), session)
+            # Создаём таблицу сообщения в базе
+            create_user(Users(), session)
+
+        print("База данных сгенерирована")
+
+    # Вставка данных о новом пользователе при команде /start
+    def create_new_user(self, message):
+        print(message.chat.id)
+        print(str(message.date)[:11])
+        timetoplanonday = "08:00:00"
+        print(timetoplanonday)
+        timetosummingup = "22:00:00"
+        print(timetosummingup)
+
+
+dbblass = databaseclass()
