@@ -1,7 +1,7 @@
 # Библиотека для работы с Ботом
 from aiogram import Router, types
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 # Импорт класса для текстовых сообщений
 from dates.startcommands import textmessages
 # Импорт класса кнопок
