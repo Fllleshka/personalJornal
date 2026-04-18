@@ -30,6 +30,9 @@ async def main():
         # Заполняем базу данных таблицами
         dbblass.create_all_databases()
 
+    # Вызываем класс для отправки напоминаний
+
+
     # Начинаем постоянный опрос бота
     await dp.start_polling(bot)
 

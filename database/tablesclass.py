@@ -1,6 +1,6 @@
 # Библиотека для работы с базой данных
 from sqlalchemy.orm import Mapped, mapped_column, sessionmaker
-from sqlalchemy import Integer, String, ForeignKey, Date, Time, func
+from sqlalchemy import Integer, String, ForeignKey, Date, Time, func, update
 # Импорт базового класса Base
 from database.baseclass import Base
 # Импорт библиотеки даты
@@ -16,9 +16,6 @@ class Message(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     text: Mapped[str] = mapped_column(String, nullable=True)
     id_user: Mapped[int] = mapped_column(ForeignKey("users.id_user"))
-
-#day: Mapped[date] = mapped_column(Date, default = date.today)
-#time: Mapped[time] = mapped_column(Time, default = func.now())
 
 # Таблица "Пользователи"
 class User(Base):
@@ -98,6 +95,25 @@ class databaseclass:
                 id_user = self.check_user_in_database(message.chat.id)
             )
             session.add(newmessage)
+            session.commit()
+
+    # Обновление времени напоминания
+    def updatetime(self, telegramiduser, daypart, newtime):
+        # Формируем запрос
+        if daypart == 'morning':
+            request = update(User).where(
+                User.id_user == self.check_user_in_database(
+                    telegramiduser)).values(timetoplanonday=time(newtime, 0, 0))
+        else:
+            request = update(User).where(
+                User.id_user == self.check_user_in_database(
+                    telegramiduser)).values(timetosummingup=time(newtime, 0, 0))
+
+        # Выполнение запроса
+        Session = sessionmaker(engine)
+        Base.metadata.create_all(engine)
+        with Session() as session:
+            session.execute(request)
             session.commit()
 
 
