@@ -10,8 +10,11 @@ from bot.planmessages import messages_router
 from database.baseclass import Base
 # Импорт функции создания всех таблиц в БД
 from database.tablesclass import dbblass
+# Импорт класса для планирования событий
+from bot.planningactions import actions
 # Установка стартовых команд бота
 from bot.startmenu import set_default_commands
+
 
 async def main():
     # Подключаем роутер, который отвечает за обработку первоначальных сообщений
@@ -31,7 +34,8 @@ async def main():
         dbblass.create_all_databases()
 
     # Вызываем класс для отправки напоминаний
-
+    action = actions()
+    action.runmorning()
 
     # Начинаем постоянный опрос бота
     await dp.start_polling(bot)
