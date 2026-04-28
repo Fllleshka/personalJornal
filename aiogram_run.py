@@ -35,7 +35,9 @@ async def main():
 
     # Вызываем класс для отправки напоминаний
     action = actions()
-    action.runmorning()
+    action.run_morning_evening()
+
+    #await action.reminder(None, "morning", 8)
 
     # Начинаем постоянный опрос бота
     await dp.start_polling(bot)
