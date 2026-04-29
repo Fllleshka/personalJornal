@@ -40,7 +40,7 @@ class actions:
         # Отправка всем клиентам напоминания
         for elem in clients:
             #print(f"Element: {elem}")
-            await self.sendmessage(elem.telegramid)
+            await self.sendmessage(elem.telegramid, args[1])
 
     # Запуск оповещений
     def run_morning_evening(self):
@@ -90,9 +90,13 @@ class actions:
                 return None
 
     # Функция отправки сообщения
-    async def sendmessage(self, telegramid):
+    async def sendmessage(self, telegramid, daytime):
         print(f"\t\tКлиенту {telegramid} необходимо отправить напоминание.")
-        textformessage = ""
-        await bot.send_message(chat_id = telegramid, text = "TEST")
+        if daytime == "morning":
+            textformessage = "Доброе утро!\n\n Давай составим план на день!"
+        else:
+
+            textformessage = "Добрый вечер!\n\n Давай подведём итоги за день!"
+        await bot.send_message(chat_id = telegramid, text = textformessage)
 
 
