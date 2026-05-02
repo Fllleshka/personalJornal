@@ -116,5 +116,23 @@ class databaseclass:
             session.execute(request)
             session.commit()
 
+    # Получение всех записей по данному аккаунту
+    def selectalldates(self, datestart, dateend, telegramid):
+
+        # Создаём сессию
+        Session = sessionmaker(engine)
+        Base.metadata.create_all(engine)
+        with Session() as session:
+            results = session.query(Message).filter(
+            Message.created_at >= datestart, Message.created_at <= dateend
+            ).all()
+        if results == None:
+            return None
+        else:
+            resultdates = []
+            for elem in results:
+                resultdates.append([results.index(elem) + 1, elem.created_at, elem.text])
+            return resultdates
+
 
 dbblass = databaseclass()

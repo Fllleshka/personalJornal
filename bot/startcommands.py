@@ -1,7 +1,8 @@
 # Библиотека для работы с Ботом
 from aiogram import Router, types, F
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
+
 # Импорт класса для текстовых сообщений
 from dates.startcommands import textmessages
 # Импорт класса кнопок
@@ -12,6 +13,8 @@ from bot.users.commandusers import create_appeal
 from database.tablesclass import dbblass
 # Импорт класса для кнопок
 from bot.markups import markup as markupclass
+# Импорт класса для работы с файлом excel
+from bot.excel import workwithexcel
 
 # Создаём роутер
 start_router = Router()
@@ -79,3 +82,16 @@ async def callback_fruits(callback: types.CallbackQuery):
         pass
 
     await callback.message.answer(text = "Обновил", reply_markup=None)
+
+# Обработка команды /exportdates
+@start_router.message(Command('exportdates'))
+async def cmd_exportdates(message: Message):
+
+    print("Нажата кнопка exportdates")
+
+    telegramiduser = message.chat.id
+    file = workwithexcel(telegramiduser)
+    filetosend = FSInputFile(file.createexcelfile())
+
+    textmessage = "Вот ваш файл за прошедший месяц!"
+    await message.answer_document(filetosend, caption = textmessage)

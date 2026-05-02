@@ -5,7 +5,8 @@ from aiogram.types import BotCommand, BotCommandScopeDefault
 async def set_default_commands(bot):
     commands = [
         BotCommand(command = "start", description = 'Начать сначала'),
-        BotCommand(command = "settings", description = 'Настройка расписания')
+        BotCommand(command = "settings", description = 'Настройка расписания'),
+        BotCommand(command = "exportdates", description = "Экспорт данных")
     ]
     await bot.set_my_commands(commands=commands, scope=BotCommandScopeDefault())
     print("Команды успешно добавлены")
