@@ -2,6 +2,8 @@
 from aiogram import Router, types, F
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, FSInputFile
+# Баблиотека работы с датой
+import datetime
 
 # Импорт класса для текстовых сообщений
 from dates.startcommands import textmessages
@@ -87,11 +89,41 @@ async def callback_fruits(callback: types.CallbackQuery):
 @start_router.message(Command('exportdates'))
 async def cmd_exportdates(message: Message):
 
-    print("Нажата кнопка exportdates")
+    textmessage = "Выберите промежуток за которы нужно выгрузить данные."
+    inline_button = [
+        [types.InlineKeyboardButton(text=buttonstext.lastmonth, callback_data="exportexcel_1")],
+        [types.InlineKeyboardButton(text=buttonstext.lastthreemoth, callback_data="exportexcel_3")],
+        [types.InlineKeyboardButton(text=buttonstext.lastsixmonth, callback_data="exportexcel_6")],
+    ]
+    markup = types.InlineKeyboardMarkup(inline_keyboard=inline_button)
+    await message.answer(text=textmessage, reply_markup=markup)
 
-    telegramiduser = message.chat.id
+# Обработка callbackов кнопок /exportdates
+@start_router.callback_query(F.data.startswith("exportexcel_"))
+async def callback_buttons_excel(callback: types.CallbackQuery):
+
+    data = callback.data
+    month = data.split("_")
+
+    #print(f"Нажата кнопка: {month[1]}")
+
+    today = datetime.datetime.today()
+    match(month[1]):
+        case '3':
+            newdate = today - datetime.timedelta(days = 90)
+        case '6':
+            newdate = today - datetime.timedelta(days = 180)
+        case _:
+            newdate = today
+
+    datestart = datetime.date(newdate.year, newdate.month, 1)
+    #print(f"Дата начала: {datestart}")
+    dateend = datetime.date(today.year, today.month, today.day)
+    #print(f"Дата окончания: {dateend}")
+
+    telegramiduser = callback.message.chat.id
     file = workwithexcel(telegramiduser)
-    filetosend = FSInputFile(file.createexcelfile())
+    filetosend = FSInputFile(file.createexcelfile(datestart, dateend))
 
-    textmessage = "Вот ваш файл за прошедший месяц!"
-    await message.answer_document(filetosend, caption = textmessage)
+    textmessage = "Вот ваш файл"
+    await callback.message.answer_document(filetosend, caption = textmessage)
