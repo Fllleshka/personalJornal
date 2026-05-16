@@ -7,6 +7,8 @@
 ![/start](images/readme/start.png)
 <h4>/settings</h4>
 ![/settings](images/readme/settings.png)
+<h4>/expoerdates</h4>
+![/settings](images/readme/exportdates.png)
 
 <h3>Запуск</h3>
 1. Для запуска необходимо установить зависимости в файле requirements.txt при помощи команды:<br>

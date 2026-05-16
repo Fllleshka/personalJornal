@@ -24,10 +24,22 @@ start_router = Router()
 # Обработка команды /start
 @start_router.message(CommandStart())
 async def cmd_start(message: Message):
+    # Получаем имя
     name = create_appeal(message)
-    textmessage = f"Привет, {name}!\n" + textmessages.startmessage + textmessages.startmessage2
-    dbblass.create_new_user(message)
-    await message.answer(text = textmessage)
+    # Проверка на существование аккаунта
+    if dbblass.check_user_in_database(message.chat.id) == False:
+        textmessage = f"Привет, {name}!\n" + textmessages.startmessage + textmessages.startmessage2
+        dbblass.create_new_user(message)
+        await message.answer(text = textmessage)
+    else:
+        datesfromdabase = dbblass.selecttimesfromusers(message.chat.id)
+        textmessage = f"Снова здравствуй, {name}!\n"
+        textmessage += textmessages.startmessage3
+        textmessage += datesfromdabase[0] + "\n\n"
+        textmessage += textmessages.startmessage4
+        textmessage += datesfromdabase[1] + "\n\n"
+        await message.answer(text = textmessage)
+
 
 # Обработка команды /settings
 @start_router.message(Command('settings'))

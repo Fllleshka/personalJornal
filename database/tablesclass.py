@@ -59,6 +59,18 @@ class databaseclass:
         else:
             return user.id_user
 
+    # Получение данных из таблицы Users
+    def selecttimesfromusers(self, telegramid):
+        # Создаём сессию
+        Session = sessionmaker(engine)
+        Base.metadata.create_all(engine)
+        with Session() as session:
+            results = session.query(User).filter(
+                User.telegramid == telegramid
+            ).first()
+        return [results.timetoplanonday.strftime("%H:%S"), results.timetosummingup.strftime("%H:%S")]
+
+
     # Вставка данных о новом пользователе при команде /start
     def create_new_user(self, message):
         # Время планирования на день
@@ -66,22 +78,19 @@ class databaseclass:
         # Время подведения итогов дня
         timetosummingup = time(22, 0, 0)
 
-        if self.check_user_in_database(message.chat.id) == False:
-            # Создаём сессию
-            Session = sessionmaker(engine)
-            Base.metadata.create_all(engine)
-            with Session() as session:
-                newuser = User(
-                    telegramid = message.chat.id,
-                    registrationdate = date.today(),
-                    timetoplanonday = timetoplanonday,
-                    timetosummingup = timetosummingup
-                )
-                session.add(newuser)
-                session.commit()
-            print(f"Создание пользователя {message.chat.id} успешно")
-        else:
-            print(f"Создание пользователя {message.chat.id} не требуется")
+        # Создаём сессию
+        Session = sessionmaker(engine)
+        Base.metadata.create_all(engine)
+        with Session() as session:
+            newuser = User(
+                telegramid = message.chat.id,
+                registrationdate = date.today(),
+                timetoplanonday = timetoplanonday,
+                timetosummingup = timetosummingup
+            )
+            session.add(newuser)
+            session.commit()
+        print(f"Создание пользователя {message.chat.id} успешно")
 
     # Вставка сообщения от пользователя в базу данных
     def add_message_to_database(self, message):
