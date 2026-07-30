@@ -1,5 +1,7 @@
 # Библиотека для асинхронного кода
 import asyncio
+# Библиотека для работы со временем
+import time
 # Из файла create_bot подгружаем bot
 from createbot import bot, dp
 # Обработка стартовых команд бота
@@ -36,11 +38,15 @@ async def main():
     # Вызываем класс для отправки напоминаний
     action = actions()
     action.run_morning_evening()
-
-    #await action.reminder(None, "morning", 8)
-
-    # Начинаем постоянный опрос бота
+    # Запустили постоянный опрос бота Telegram
     await dp.start_polling(bot)
 
+
 if __name__ == "__main__":
-    asyncio.run(main())
+
+    try:
+        asyncio.run(main())
+
+    except Exception as e:
+        print(e)
+        time.sleep(15)
